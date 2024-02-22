@@ -14,6 +14,14 @@ public class User {
     private String secret;
     private List<Play> plays;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User() {
+    }
+
     public int getId() {
         return id;
     }

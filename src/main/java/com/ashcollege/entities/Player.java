@@ -3,7 +3,8 @@ package com.ashcollege.entities;
 
 public class Player {
     private boolean hasBall;
-    private Action action;
+    private int number;
+
     private Point position;
 
 

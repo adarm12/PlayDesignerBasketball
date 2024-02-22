@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Phase {
     private List<Player> players;
+    private List<Action> actions;
 
 
 

@@ -27,6 +27,11 @@ public class GeneralController {
     @Autowired
     private Persist persist;
 
+    @RequestMapping (value = "add-user")
+    public BasicResponse addUser (String username, String password) {
+        return persist.insertUser(username,password);
+    }
+
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object test () {
@@ -89,13 +94,13 @@ public class GeneralController {
         return basicResponse;
     }
 
-    @RequestMapping(value = "test")
-    public Client test (String firstName, String newFirstName) {
-        Client client = persist.getClientByFirstName(firstName);
-        client.setFirstName(newFirstName);
-        client.setLastName(newFirstName);
-        persist.save(client);
-        return client;
-    }
+//    @RequestMapping(value = "test")
+//    public Client test (String firstName, String newFirstName) {
+//        Client client = persist.getClientByFirstName(firstName);
+//        client.setFirstName(newFirstName);
+//        client.setLastName(newFirstName);
+//        persist.save(client);
+//        return client;
+//    }
 
 }

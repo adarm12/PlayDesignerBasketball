@@ -10,4 +10,6 @@ public class Errors {
 
     public static final int ERROR_SECRET_WAS_NOT_SENT = 7;
     public static final int ERROR_NO_SUCH_USER = 8;
+    public static final int ERROR_USERNAME_TAKEN = 9;
+
 }

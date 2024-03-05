@@ -1,18 +1,22 @@
 package com.ashcollege.entities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class User {
     private int id;
     private String username;
     private String password;
     private int age;
-    private Set<User> friends = new HashSet<>();
+    private Map<User,Status> friends = new HashMap<>();
     private String secret;
     private List<Play> plays;
+
+    private enum Status {
+        YES,
+        NO,
+        IN_PROCESS
+    }
+
 
     public User(String username, String password) {
         this.username = username;
@@ -54,12 +58,15 @@ public class User {
         this.age = age;
     }
 
-    public Set<User> getFriends() {
+    public Map<User, Status> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(Map<User, Status> friends) {
         this.friends = friends;
+    }
+    public void addFriends(User user,Status success) {
+        friends.put(user,success);
     }
 
     public String getSecret() {

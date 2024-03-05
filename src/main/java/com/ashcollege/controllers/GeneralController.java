@@ -27,10 +27,16 @@ public class GeneralController {
     @Autowired
     private Persist persist;
 
-    @RequestMapping (value = "add-user")
+    @RequestMapping (value = "add-user", method = {RequestMethod.GET, RequestMethod.POST} )
     public BasicResponse addUser (String username, String password) {
         return persist.insertUser(username,password);
     }
+
+    @RequestMapping (value = "search-user", method = {RequestMethod.GET, RequestMethod.POST} )
+    public List<User> searchUser (String partOfUsername) {
+        return persist.searchUser(partOfUsername);
+    }
+
 
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})

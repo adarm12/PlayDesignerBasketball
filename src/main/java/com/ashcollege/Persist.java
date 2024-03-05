@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ashcollege.utils.Errors.ERROR_USERNAME_TAKEN;
@@ -54,6 +55,36 @@ public class Persist {
             basicResponse.setSuccess(true);
             basicResponse.setErrorCode(0);
         }
+        return basicResponse;
+    }
+
+    public List<User> searchUser(String partOfUsername) {
+        List<User> users = new ArrayList<>();
+        users = (List<User>) this.sessionFactory.getCurrentSession().createQuery(
+                        "FROM User WHERE username LIKE :username")
+                .setParameter("username", "%" + partOfUsername + "%")
+                .list();
+        System.out.println(users.size());
+        return users;
+    }
+
+
+    public BasicResponse friendRequest(String secretFrom,String usernameTo) {
+        BasicResponse basicResponse =new BasicResponse(false,0);
+        User user;
+        user = (User) this.sessionFactory.getCurrentSession().createQuery(
+                        "From User WHERE secret = :secret ")
+                .setParameter("secret",secretFrom)
+                .setMaxResults(1)
+                .uniqueResult();
+        User userFriend;
+        userFriend = (User) this.sessionFactory.getCurrentSession().createQuery(
+                        "From User WHERE username = :username ")
+                .setParameter("username",usernameTo)
+                .setMaxResults(1)
+                .uniqueResult();
+//        user.setFriends(userFriend,false);
+
         return basicResponse;
     }
 

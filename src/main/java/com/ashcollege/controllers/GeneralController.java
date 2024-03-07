@@ -37,6 +37,11 @@ public class GeneralController {
         return persist.searchUser(partOfUsername);
     }
 
+    @RequestMapping (value = "friend-request", method = {RequestMethod.GET, RequestMethod.POST} )
+    public BasicResponse friendRequest (String secretFrom, String usernameTo) {
+        return persist.friendRequest(secretFrom,usernameTo);
+    }
+
 
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})

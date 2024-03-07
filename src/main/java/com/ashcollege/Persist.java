@@ -2,6 +2,7 @@ package com.ashcollege;
 
 
 import com.ashcollege.entities.Client;
+import com.ashcollege.entities.Friendship;
 import com.ashcollege.entities.User;
 import com.ashcollege.responses.BasicResponse;
 import org.hibernate.Session;
@@ -12,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.criteria.From;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ashcollege.utils.Errors.ERROR_USERNAME_TAKEN;
+import static com.ashcollege.utils.Constants.WAITING_FOR_ACCEPTER;
+import static com.ashcollege.utils.Errors.*;
 
 
 @Transactional
@@ -68,22 +71,49 @@ public class Persist {
         return users;
     }
 
+//    public List<User> showRequesterList(String secretFrom) {
+//        List<User> requesters = new ArrayList<>();
+//        requesters = (List<User>) this.sessionFactory.getCurrentSession().createQuery(
+//                        "FROM Friendship WHERE accepter_id = :id")
+//                .setParameter("id", User.secretFrom.id)
+//                .list();
+//    }
+
 
     public BasicResponse friendRequest(String secretFrom,String usernameTo) {
         BasicResponse basicResponse =new BasicResponse(false,0);
-        User user;
-        user = (User) this.sessionFactory.getCurrentSession().createQuery(
-                        "From User WHERE secret = :secret ")
-                .setParameter("secret",secretFrom)
-                .setMaxResults(1)
-                .uniqueResult();
-        User userFriend;
-        userFriend = (User) this.sessionFactory.getCurrentSession().createQuery(
-                        "From User WHERE username = :username ")
-                .setParameter("username",usernameTo)
-                .setMaxResults(1)
-                .uniqueResult();
-//        user.setFriends(userFriend,false);
+        User user=null;
+        if (secretExist(secretFrom)) {
+            user = (User) this.sessionFactory.getCurrentSession().createQuery(
+                            "From User WHERE secret = :secret ")
+                    .setParameter("secret", secretFrom)
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+        else {
+            basicResponse.setErrorCode(ERROR_NO_SUCH_SECRET);
+            return basicResponse;
+        }
+        User userFriend=null;
+        if (usernameExist(usernameTo)) {
+            userFriend = (User) this.sessionFactory.getCurrentSession().createQuery(
+                            "From User WHERE username = :username ")
+                    .setParameter("username", usernameTo)
+                    .setMaxResults(1)
+                    .uniqueResult();
+        }
+        else {
+            basicResponse.setErrorCode(ERROR_NO_SUCH_USERNAME);
+            return basicResponse;
+        }
+
+        Friendship friendship = new Friendship(user,userFriend, WAITING_FOR_ACCEPTER);
+        try {
+            save(friendship);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        basicResponse.setSuccess(true);
 
         return basicResponse;
     }
@@ -96,6 +126,21 @@ public class Persist {
                 .setMaxResults(1)
                 .uniqueResult();
         return (user==null);
+
+    }
+
+    private boolean usernameExist(String username) {
+        return !usernameAvailable(username);
+    }
+
+    private boolean secretExist(String secret) {
+        User user;
+        user = (User) this.sessionFactory.getCurrentSession().createQuery(
+                        "From User WHERE secret = :secret ")
+                .setParameter("secret",secret)
+                .setMaxResults(1)
+                .uniqueResult();
+        return (user!=null);
 
     }
 //

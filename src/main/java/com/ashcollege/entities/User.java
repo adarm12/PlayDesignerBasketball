@@ -9,7 +9,6 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private int age;
     private Set<Friendship> friends = new HashSet<>();
     private String secret;
     private List<Play> plays;
@@ -46,13 +45,6 @@ public class User {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public Set<Friendship> getFriends() {
         return friends;

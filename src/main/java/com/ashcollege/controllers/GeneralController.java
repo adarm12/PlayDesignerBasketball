@@ -33,13 +33,18 @@ public class GeneralController {
     }
 
     @RequestMapping (value = "search-user", method = {RequestMethod.GET, RequestMethod.POST} )
-    public List<User> searchUser (String partOfUsername) {
-        return persist.searchUser(partOfUsername);
+    public List<User> searchUser (String secretFrom,String partOfUsername) {
+        return persist.searchUser(secretFrom,partOfUsername);
     }
 
     @RequestMapping (value = "friend-request", method = {RequestMethod.GET, RequestMethod.POST} )
     public BasicResponse friendRequest (String secretFrom, String usernameTo) {
         return persist.friendRequest(secretFrom,usernameTo);
+    }
+
+    @RequestMapping (value = "show-requesters", method = {RequestMethod.GET, RequestMethod.POST} )
+    public BasicResponse showRequesters (String secretFrom) {
+        return persist.showRequestersList(secretFrom);
     }
 
 

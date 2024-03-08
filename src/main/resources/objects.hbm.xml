@@ -11,7 +11,6 @@
         <property name="username" type="string" column="username"/>
         <property name="password" type="string" column="password"/>
         <property name="secret" type="string" column="secret"/>
-        <property name="age" type="int" column="age"/>
         <set name="friends" table="friendships" inverse="true" cascade="save-update">
             <key column="requester_id"/>
             <many-to-many column="accepter_id" class="com.ashcollege.entities.User"/>

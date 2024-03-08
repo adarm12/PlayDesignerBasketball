@@ -11,28 +11,20 @@
         <property name="username" type="string" column="username"/>
         <property name="password" type="string" column="password"/>
         <property name="secret" type="string" column="secret"/>
-        <property name="age" type="int" column="age"/>
         <set name="friends" table="friendships" inverse="true" cascade="save-update">
-            <key column="user_id1"/>
-            <many-to-many column="user_id2" class="com.ashcollege.entities.User"/>
+            <key column="requester_id"/>
+            <many-to-many column="accepter_id" class="com.ashcollege.entities.User"/>
         </set>
-
     </class>
 
-    <class name="com.ashcollege.entities.User" table="users" lazy="false">
+
+    <class name="com.ashcollege.entities.Friendship" table="friendships">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
-        <property name="username" type="string" column="username"/>
-        <property name="password" type="string" column="password"/>
-        <property name="secret" type="string" column="secret"/>
-        <property name="age" type="int" column="age"/>
-        <set name="friends" table="friendships" inverse="true" cascade="save-update">
-            <key column="user_id1"/>
-            <many-to-many column="user_id2" class="com.ashcollege.entities.User"/>
-        </set>
-
+        <many-to-one name="requester" class="com.ashcollege.entities.User" column="requester_id" not-null="true"/>
+        <many-to-one name="accepter" class="com.ashcollege.entities.User" column="accepter_id" not-null="true"/>
+        <property name="status" column="status" type="int"/>
     </class>
-
-
 </hibernate-mapping>
+

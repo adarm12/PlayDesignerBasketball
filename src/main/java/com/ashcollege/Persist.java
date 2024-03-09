@@ -5,6 +5,7 @@ import com.ashcollege.entities.Friendship;
 import com.ashcollege.entities.User;
 import com.ashcollege.responses.BasicResponse;
 import com.ashcollege.responses.ListUserResponse;
+import com.github.javafaker.Faker;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,8 @@ public class Persist {
         BasicResponse basicResponse = new BasicResponse(false,ERROR_USERNAME_TAKEN);
         if (usernameAvailable(username)) {
             User user = new User(username,password);
+            Faker faker = new Faker();
+            user.setSecret(faker.random().hex(5));
             save(user);
             basicResponse.setSuccess(true);
             basicResponse.setErrorCode(0);
@@ -100,9 +103,6 @@ public class Persist {
             return basicResponse;
         }
     }
-
-
-
 
     public BasicResponse friendRequest(String secretFrom,String usernameTo) {
         BasicResponse basicResponse =new BasicResponse(false,0);

@@ -27,9 +27,7 @@ import static com.ashcollege.utils.Errors.*;
 public class Persist {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Persist.class);
-
     private final SessionFactory sessionFactory;
-
 
 
 

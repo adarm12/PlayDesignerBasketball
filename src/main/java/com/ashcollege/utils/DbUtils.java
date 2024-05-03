@@ -1,7 +1,6 @@
 package com.ashcollege.utils;
 
 
-import com.ashcollege.entities.Product;
 import com.ashcollege.entities.User;
 import org.springframework.stereotype.Component;
 
@@ -63,18 +62,6 @@ public class DbUtils {
     }
 
 
-    public void addProduct(Product product) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO product (description, price, count) VALUES ( ? , ? , ?)");
-            preparedStatement.setString(1, product.getDescription());
-            preparedStatement.setFloat(2, product.getPrice());
-            preparedStatement.setInt(3, product.getCount());
-            preparedStatement.executeUpdate();
-
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /*public boolean checkCredentials (String username, String password) {
         boolean ok = false;
@@ -107,46 +94,46 @@ public class DbUtils {
 
     }
 
-    public List<Product> getProductsByUserSecret (String secret) {
-        List<Product> products = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "SELECT p.description, p.price " +
-                            "FROM users u INNER JOIN users_products_map upm ON u.id = upm.user_id " +
-                            "INNER JOIN products p ON upm.product_id = p.id " +
-                            "WHERE u.secret = ?"
-            );
-            preparedStatement.setString(1, secret);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                String description = resultSet.getString(1);
-                float price = resultSet.getFloat(2);
-                Product product = new Product(description, price, 0);
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return products;
-    }
-
-    public User getUserBySecret (String secret) {
-        User user = null;
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE secret = ?");
-            preparedStatement.setString(1, secret);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                user = new User();
-                user.setId(id);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return user;
-
-    }
-
+//    public List<Product> getProductsByUserSecret (String secret) {
+//        List<Product> products = new ArrayList<>();
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(
+//                    "SELECT p.description, p.price " +
+//                            "FROM users u INNER JOIN users_products_map upm ON u.id = upm.user_id " +
+//                            "INNER JOIN products p ON upm.product_id = p.id " +
+//                            "WHERE u.secret = ?"
+//            );
+//            preparedStatement.setString(1, secret);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                String description = resultSet.getString(1);
+//                float price = resultSet.getFloat(2);
+//                Product product = new Product(description, price, 0);
+//                products.add(product);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return products;
+//    }
+//
+//    public User getUserBySecret (String secret) {
+//        User user = null;
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE secret = ?");
+//            preparedStatement.setString(1, secret);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            if (resultSet.next()) {
+//                int id = resultSet.getInt(1);
+//                user = new User();
+//                user.setId(id);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return user;
+//
+//    }
+//
 
 }

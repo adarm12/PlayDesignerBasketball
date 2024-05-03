@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ashcollege.utils.Constants.ACTIVE_FRIEND;
 import static com.ashcollege.utils.Constants.WAITING_FOR_ACCEPTER;
 import static com.ashcollege.utils.Errors.*;
 
@@ -76,6 +77,30 @@ public class Persist {
             }
         }
         return users;
+    }
+
+    public BasicResponse acceptFriend(String secret, String usernameToAccept) {
+        BasicResponse basicResponse = new BasicResponse(false,0);
+        User accepter = getUserBySecret(secret);
+        if (accepter== null) {
+            basicResponse.setErrorCode(ERROR_NO_SUCH_USERNAME);
+            return basicResponse;
+        }
+        User requester = getUserByUsername(usernameToAccept);
+        if (requester== null) {
+            basicResponse.setErrorCode(ERROR_NO_SUCH_SECRET);
+            return basicResponse;
+        }
+        Friendship friendship = getFriendshipByTwoUsers(requester,accepter);
+        if (friendship == null) {
+            basicResponse.setErrorCode(ERROR_FRIENDSHIP_DOESNT_EXIST);
+            return basicResponse;
+        }
+        friendship.setStatus(ACTIVE_FRIEND);
+        save(friendship);
+
+        basicResponse.setSuccess(true);
+        return basicResponse;
     }
 
     public BasicResponse showRequestersList(String secretFrom) {
@@ -162,14 +187,14 @@ public class Persist {
         return friendship != null;
     }
 
-    private Friendship getFriendshipByTwoUsers(User user1, User user2) {
+    private Friendship getFriendshipByTwoUsers(User requester, User accepter) {
         Friendship friendship;
 
         Session session = this.sessionFactory.getCurrentSession();
         friendship = (Friendship) session.createQuery(
                         "FROM Friendship f WHERE f.requester.id = :id1 AND f.accepter.id = :id2")
-                .setParameter("id1", user1.getId())
-                .setParameter("id2", user2.getId())
+                .setParameter("id1", requester.getId())
+                .setParameter("id2", accepter.getId())
                 .setMaxResults(1)
                 .uniqueResult();
         return friendship;

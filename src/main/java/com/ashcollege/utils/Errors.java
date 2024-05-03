@@ -13,6 +13,7 @@ public class Errors {
     public static final int ERROR_USERNAME_TAKEN = 9;
     public static final int ERROR_NO_SUCH_SECRET = 10;
     public static final int ERROR_FRIENDSHIP_EXIST = 11;
+    public static final int ERROR_FRIENDSHIP_DOESNT_EXIST = 12;
 
 
 

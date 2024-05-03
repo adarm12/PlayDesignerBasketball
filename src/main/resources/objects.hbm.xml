@@ -11,10 +11,7 @@
         <property name="username" type="string" column="username"/>
         <property name="password" type="string" column="password"/>
         <property name="secret" type="string" column="secret"/>
-        <set name="friends" table="friendships" inverse="true" cascade="save-update">
-            <key column="requester_id"/>
-            <many-to-many column="accepter_id" class="com.ashcollege.entities.User"/>
-        </set>
+
     </class>
 
 
@@ -26,5 +23,59 @@
         <many-to-one name="accepter" class="com.ashcollege.entities.User" column="accepter_id" not-null="true"/>
         <property name="status" column="status" type="int"/>
     </class>
+
+    <class name="com.ashcollege.entities.Play" table="plays" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="owner" class="com.ashcollege.entities.User" column="owner_id" not-null="true"/>
+
+
+
+    </class>
+
+    <class name="com.ashcollege.entities.Phase" table="phases" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="player1" class="com.ashcollege.entities.PlayerPhase" column="player1_id" not-null="true"/>
+        <many-to-one name="player2" class="com.ashcollege.entities.PlayerPhase" column="player2_id" not-null="true"/>
+        <many-to-one name="player3" class="com.ashcollege.entities.PlayerPhase" column="player3_id" not-null="true"/>
+        <many-to-one name="player4" class="com.ashcollege.entities.PlayerPhase" column="player4_id" not-null="true"/>
+        <many-to-one name="player5" class="com.ashcollege.entities.PlayerPhase" column="player5_id" not-null="true"/>
+        <property name="order" type="int" column="order"/>
+
+        <many-to-one name="play" class="com.ashcollege.entities.Play" column="play_id"/>
+
+    </class>
+
+
+
+    <class name="com.ashcollege.entities.PlayerPhase" table="playersToPhases" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="hasBall" type="boolean" column="ball"/>
+        <property name="number" type="int" column="number"/>
+        <property name="x" type="string" column="x"/>
+        <property name="y" type="string" column="y"/>
+        <property name="action" type="int" column="action"/>
+
+
+    </class>
+
+<!--    <class name="com.ashcollege.entities.Action" table="actions" lazy="false">-->
+<!--        <id name="id" type="int" column="id">-->
+<!--            <generator class="native"/>-->
+<!--        </id>-->
+<!--        <property name="timing" type="int" column="timing"/>-->
+<!--        <property name="type" type="int" column="type"/>-->
+<!--        <property name="goX" type="int" column="x"/>-->
+<!--        <property name="goY" type="int" column="y"/>-->
+
+
+<!--    </class>-->
+
+
 </hibernate-mapping>
 

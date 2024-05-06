@@ -30,6 +30,11 @@ public class GeneralController {
         return persist.insertUser(username, password, repeatPassword);
     }
 
+    @RequestMapping(value = "login", method = {RequestMethod.GET, RequestMethod.POST})
+    public LoginResponse login(String username, String password) {
+        return persist.login(username, password);
+    }
+
     @RequestMapping(value = "search-user", method = {RequestMethod.GET, RequestMethod.POST})
     public List<User> searchUser(String secretFrom, String partOfUsername) {
         return persist.searchUser(secretFrom, partOfUsername);
@@ -56,62 +61,5 @@ public class GeneralController {
         return "Hello From Server";
     }
 
-
-    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
-    public BasicResponse login(String username, String password) {
-        BasicResponse basicResponse = null;
-        boolean success = false;
-        Integer errorCode = null;
-        if (username != null && username.length() > 0) {
-            if (password != null && password.length() > 0) {
-                User user = dbUtils.login(username, password);
-                if (user != null) {
-                    basicResponse = new LoginResponse(true, errorCode, user.getId(), user.getSecret());
-                } else {
-                    errorCode = ERROR_LOGIN_WRONG_CREDS;
-                }
-            } else {
-                errorCode = ERROR_SIGN_UP_NO_PASSWORD;
-            }
-        } else {
-            errorCode = ERROR_SIGN_UP_NO_USERNAME;
-        }
-        if (errorCode != null) {
-            basicResponse = new BasicResponse(success, errorCode);
-        }
-        return basicResponse;
-    }
-
-
-//    @RequestMapping(value = "get-products")
-//    public BasicResponse getProducts (String secret) {
-//        boolean success = false;
-//        Integer errorCode = null;
-//        BasicResponse basicResponse = null;
-//        if (secret != null) {
-//            User user = dbUtils.getUserBySecret(secret);
-//            if (user != null) {
-//                List<Product> products = dbUtils.getProductsByUserSecret(secret);
-//                basicResponse = new ProductsResponse(true, null, products);
-//            } else {
-//                errorCode = ERROR_NO_SUCH_USER;
-//            }
-//        } else {
-//            errorCode = ERROR_SECRET_WAS_NOT_SENT;
-//        }
-//        if (errorCode != null) {
-//            basicResponse = new BasicResponse(false, errorCode);
-//        }
-//        return basicResponse;
-//    }
-
-//    @RequestMapping(value = "test")
-//    public Client test (String firstName, String newFirstName) {
-//        Client client = persist.getClientByFirstName(firstName);
-//        client.setFirstName(newFirstName);
-//        client.setLastName(newFirstName);
-//        persist.save(client);
-//        return client;
-//    }
 
 }

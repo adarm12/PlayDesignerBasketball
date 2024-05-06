@@ -3,6 +3,7 @@ import com.ashcollege.entities.Friendship;
 import com.ashcollege.entities.User;
 import com.ashcollege.responses.BasicResponse;
 import com.ashcollege.responses.ListUserResponse;
+import com.ashcollege.responses.LoginResponse;
 import com.github.javafaker.Faker;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,6 +77,25 @@ public class Persist {
         } else basicResponse.setErrorCode(ERROR_SHORT_PASSWORD);
 
         return basicResponse;
+    }
+
+    public LoginResponse login(String username, String password) {
+        LoginResponse loginResponse = new LoginResponse(false, ERROR_MISSING_FIELDS);
+        if (!username.isEmpty()) {
+            if (usernameExist(username)) {
+                if (!password.isEmpty()) {
+                    if (userExists(username, password) != null) {
+                        User user = userExists(username, password);
+                        loginResponse.setSuccess(true);
+                        loginResponse.setErrorCode(NO_ERRORS);
+                        loginResponse.setId(user.getId());
+                        loginResponse.setSecret(user.getSecret());
+                        loginResponse.setUser(user);
+                    } else loginResponse.setErrorCode(ERROR_INCORRECT_PASSWORD);
+                } else loginResponse.setErrorCode(ERROR_NO_PASSWORD);
+            } else loginResponse.setErrorCode(ERROR_NO_SUCH_USER);
+        } else loginResponse.setErrorCode(ERROR_NO_USERNAME);
+        return loginResponse;
     }
 
 
@@ -241,18 +261,17 @@ public class Persist {
         return (getUserBySecret(secret) != null);
 
     }
-//
-//    public <T> List<T> loadList(Class<T> clazz) {
-//        return  this.sessionFactory.getCurrentSession().createQuery("FROM Client").list();
-//    }
 
-//    public Client getClientByFirstName (String firstName) {
-//        return (Client) this.sessionFactory.getCurrentSession().createQuery(
-//                "FROM Client WHERE firstName = :firstName ")
-//                .setParameter("firstName", firstName)
-//                .setMaxResults(1)
-//                .uniqueResult();
-//    }
+    private User userExists(String username, String password) {
+        User user;
+        user = (User) this.sessionFactory.getCurrentSession().createQuery(
+                        "From User WHERE username = :username AND password =: password ")
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .setMaxResults(1)
+                .uniqueResult();
+        return user;
+    }
 
 
 }

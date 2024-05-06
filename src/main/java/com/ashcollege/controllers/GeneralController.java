@@ -55,6 +55,11 @@ public class GeneralController {
         return persist.showRequestersList(secretFrom);
     }
 
+    @RequestMapping(value = "create-play", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse createPlay(String userSecret, String playName) {
+        return persist.createPlay(userSecret,playName);
+    }
+
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object test() {

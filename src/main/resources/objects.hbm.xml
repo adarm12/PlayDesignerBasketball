@@ -28,6 +28,8 @@
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
+        <property name="name" type="string" column="play_name"/>
+
         <many-to-one name="owner" class="com.ashcollege.entities.User" column="owner_id" not-null="true"/>
 
 

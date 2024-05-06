@@ -1,5 +1,6 @@
 package com.ashcollege;
 import com.ashcollege.entities.Friendship;
+import com.ashcollege.entities.Play;
 import com.ashcollege.entities.User;
 import com.ashcollege.responses.BasicResponse;
 import com.ashcollege.responses.ListUserResponse;
@@ -271,6 +272,29 @@ public class Persist {
                 .setMaxResults(1)
                 .uniqueResult();
         return user;
+    }
+
+//    private boolean playExist(User user, String playName) {
+//        List<Play> plays = (List<Play>) this.sessionFactory.getCurrentSession().createQuery(
+//                        "From Play");
+//        return plays!=null;
+//    }
+
+    public BasicResponse createPlay(String userSecret, String playName) {
+        BasicResponse basicResponse = new BasicResponse(false,0);
+        User user = getUserBySecret(userSecret);
+        if (user==null) {
+            basicResponse.setErrorCode(ERROR_NO_SUCH_USER);
+            return basicResponse;
+        }
+//        if (playExist(user,playName)) {
+//            basicResponse.setErrorCode(THERE_IS_ALREADY_PLAY_WITH_THIS_NAME);
+//            return basicResponse;
+//        }
+        Play play = new Play(user,playName);
+        save(play);
+        basicResponse.setSuccess(true);
+        return basicResponse;
     }
 
 

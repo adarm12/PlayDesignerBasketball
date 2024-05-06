@@ -5,16 +5,28 @@ import java.util.List;
 
 public class Play {
     private int id;
+
+    private String name;
     private List<Phase> phases;
     private User owner;
+
 
     public Play() {
     }
 
-    public Play(List<Phase> phases) {
-        this.phases = phases;
+    public Play(User owner, String playName) {
+        this.owner = owner;
+        this.name = playName;
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;

@@ -25,41 +25,40 @@ public class GeneralController {
     private Persist persist;
 
 
-
-    @PostMapping(value = "add-user")
-    public BasicResponse addUser (String username, String password) {
-        return persist.insertUser(username,password);
+    @RequestMapping(value = "add-user", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse addUser(String username, String password, String repeatPassword) {
+        return persist.insertUser(username, password, repeatPassword);
     }
 
-    @RequestMapping (value = "search-user", method = {RequestMethod.GET, RequestMethod.POST} )
-    public List<User> searchUser (String secretFrom,String partOfUsername) {
-        return persist.searchUser(secretFrom,partOfUsername);
+    @RequestMapping(value = "search-user", method = {RequestMethod.GET, RequestMethod.POST})
+    public List<User> searchUser(String secretFrom, String partOfUsername) {
+        return persist.searchUser(secretFrom, partOfUsername);
     }
 
-    @RequestMapping (value = "friend-request", method = {RequestMethod.GET, RequestMethod.POST} )
-    public BasicResponse friendRequest (String secretFrom, String usernameTo) {
-        return persist.friendRequest(secretFrom,usernameTo);
-    }
-    @RequestMapping (value = "accept-friend", method = {RequestMethod.GET, RequestMethod.POST} )
-    public BasicResponse acceptFriend (String secret, String usernameTo) {
-        return persist.acceptFriend(secret,usernameTo);
+    @RequestMapping(value = "friend-request", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse friendRequest(String secretFrom, String usernameTo) {
+        return persist.friendRequest(secretFrom, usernameTo);
     }
 
-    @RequestMapping (value = "show-requesters", method = {RequestMethod.GET, RequestMethod.POST} )
-    public BasicResponse showRequesters (String secretFrom) {
+    @RequestMapping(value = "accept-friend", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse acceptFriend(String secret, String usernameTo) {
+        return persist.acceptFriend(secret, usernameTo);
+    }
+
+    @RequestMapping(value = "show-requesters", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse showRequesters(String secretFrom) {
         return persist.showRequestersList(secretFrom);
     }
 
 
-
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
-    public Object test () {
+    public Object test() {
         return "Hello From Server";
     }
 
 
-    @RequestMapping (value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
-    public BasicResponse login (String username, String password) {
+    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse login(String username, String password) {
         BasicResponse basicResponse = null;
         boolean success = false;
         Integer errorCode = null;
@@ -82,8 +81,6 @@ public class GeneralController {
         }
         return basicResponse;
     }
-
-
 
 
 //    @RequestMapping(value = "get-products")

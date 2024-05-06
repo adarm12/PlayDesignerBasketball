@@ -1,6 +1,4 @@
 package com.ashcollege;
-
-
 import com.ashcollege.entities.Friendship;
 import com.ashcollege.entities.User;
 import com.ashcollege.responses.BasicResponse;
@@ -31,7 +29,6 @@ public class Persist {
     private final SessionFactory sessionFactory;
 
 
-
     @Autowired
     public Persist(SessionFactory sf) {
         this.sessionFactory = sf;
@@ -49,18 +46,38 @@ public class Persist {
         return this.getQuerySession().get(clazz, oid);
     }
 
-    public BasicResponse insertUser(String username, String password) {
-        BasicResponse basicResponse = new BasicResponse(false,ERROR_USERNAME_TAKEN);
-        if (usernameAvailable(username)) {
-            User user = new User(username,password);
-            Faker faker = new Faker();
-            user.setSecret(faker.random().hex(5));
-            save(user);
-            basicResponse.setSuccess(true);
-            basicResponse.setErrorCode(0);
-        }
+    public BasicResponse insertUser(String username, String password, String repeatPassword) {
+        BasicResponse basicResponse = new BasicResponse(false, ERROR_MISSING_FIELDS);
+        if (!username.isEmpty()) {
+            if (usernameAvailable(username)) {
+                        if (!password.isEmpty()) {
+                            if (password.equals(repeatPassword)) {
+                                if (validPassword(password).isSuccess()) {
+                                        User user = new User(username, password);
+                                        Faker faker = new Faker();
+                                        user.setSecret(faker.random().hex(5));
+                                        save(user);
+                                        basicResponse.setSuccess(true);
+                                        basicResponse.setErrorCode(NO_ERRORS);
+                                } else basicResponse = validPassword(password);
+                            } else basicResponse.setErrorCode(ERROR_PASSWORD_NOT_MATCH);
+                        } else basicResponse.setErrorCode(ERROR_NO_PASSWORD);
+            } else basicResponse.setErrorCode(ERROR_USERNAME_TAKEN);
+        } else basicResponse.setErrorCode(ERROR_NO_USERNAME);
         return basicResponse;
     }
+
+    public BasicResponse validPassword(String password) {
+        BasicResponse basicResponse = new BasicResponse(false, null);
+        if (password.length() >= 8) {
+            if (password.contains("@") || password.contains("!")) {
+                basicResponse.setSuccess(true);
+            } else basicResponse.setErrorCode(ERROR_PASSWORD_DOES_NOT_CONTAIN_SYMBOLS);
+        } else basicResponse.setErrorCode(ERROR_SHORT_PASSWORD);
+
+        return basicResponse;
+    }
+
 
     public List<User> searchUser(String secretFrom, String partOfUsername) {
         User userSender = null;
@@ -71,7 +88,7 @@ public class Persist {
                 .setParameter("username", "%" + partOfUsername + "%")
                 .list();
         System.out.println(users.size());
-        for (User user: users) {
+        for (User user : users) {
             if (user.getUsername().equals(userSender.getUsername())) {
                 users.remove(userSender);
             }
@@ -80,18 +97,18 @@ public class Persist {
     }
 
     public BasicResponse acceptFriend(String secret, String usernameToAccept) {
-        BasicResponse basicResponse = new BasicResponse(false,0);
+        BasicResponse basicResponse = new BasicResponse(false, 0);
         User accepter = getUserBySecret(secret);
-        if (accepter== null) {
+        if (accepter == null) {
             basicResponse.setErrorCode(ERROR_NO_SUCH_USERNAME);
             return basicResponse;
         }
         User requester = getUserByUsername(usernameToAccept);
-        if (requester== null) {
+        if (requester == null) {
             basicResponse.setErrorCode(ERROR_NO_SUCH_SECRET);
             return basicResponse;
         }
-        Friendship friendship = getFriendshipByTwoUsers(requester,accepter);
+        Friendship friendship = getFriendshipByTwoUsers(requester, accepter);
         if (friendship == null) {
             basicResponse.setErrorCode(ERROR_FRIENDSHIP_DOESNT_EXIST);
             return basicResponse;
@@ -118,35 +135,32 @@ public class Persist {
                     .setParameter("secret", secretFrom)
                     .setParameter("status", WAITING_FOR_ACCEPTER)
                     .list();
-            basicResponse = new ListUserResponse(true,0,requesters);
+            basicResponse = new ListUserResponse(true, 0, requesters);
             return basicResponse;
-        }
-        else{
-            basicResponse = new BasicResponse(false,ERROR_NO_SUCH_SECRET);
+        } else {
+            basicResponse = new BasicResponse(false, ERROR_NO_SUCH_SECRET);
             return basicResponse;
         }
     }
 
-    public BasicResponse friendRequest(String secretFrom,String usernameTo) {
-        BasicResponse basicResponse =new BasicResponse(false,0);
-        User user=null;
+    public BasicResponse friendRequest(String secretFrom, String usernameTo) {
+        BasicResponse basicResponse = new BasicResponse(false, 0);
+        User user = null;
         if (secretExist(secretFrom)) {
             user = getUserBySecret(secretFrom);
-        }
-        else {
+        } else {
             basicResponse.setErrorCode(ERROR_NO_SUCH_SECRET);
             return basicResponse;
         }
-        User userFriend=null;
+        User userFriend = null;
         if (usernameExist(usernameTo)) {
             userFriend = getUserByUsername(usernameTo);
-        }
-        else {
+        } else {
             basicResponse.setErrorCode(ERROR_NO_SUCH_USERNAME);
             return basicResponse;
         }
 
-        if (!friendshipExist(user,userFriend)) {
+        if (!friendshipExist(user, userFriend)) {
             Friendship friendship = new Friendship(user, userFriend, WAITING_FOR_ACCEPTER);
             try {
                 save(friendship);
@@ -156,8 +170,7 @@ public class Persist {
             basicResponse.setSuccess(true);
 
             return basicResponse;
-        }
-        else {
+        } else {
             basicResponse.setErrorCode(ERROR_FRIENDSHIP_EXIST);
             return basicResponse;
         }
@@ -183,7 +196,7 @@ public class Persist {
         }
 
         // Check if user2 is the requester and user1 is the accepter
-        friendship = getFriendshipByTwoUsers(user2,user1);
+        friendship = getFriendshipByTwoUsers(user2, user1);
         return friendship != null;
     }
 
@@ -204,7 +217,7 @@ public class Persist {
         User user;
         user = (User) this.sessionFactory.getCurrentSession().createQuery(
                         "From User WHERE username = :username ")
-                .setParameter("username",username)
+                .setParameter("username", username)
                 .setMaxResults(1)
                 .uniqueResult();
         return user;
@@ -214,18 +227,18 @@ public class Persist {
     private boolean usernameAvailable(String username) {
         User user;
         user = getUserByUsername(username);
-        return (user==null);
+        return (user == null);
 
     }
 
     private boolean usernameExist(String username) {
         User user;
         user = getUserByUsername(username);
-        return (user!=null);
+        return (user != null);
     }
 
     private boolean secretExist(String secret) {
-        return (getUserBySecret(secret)!=null);
+        return (getUserBySecret(secret) != null);
 
     }
 //

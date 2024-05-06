@@ -56,7 +56,7 @@
             <generator class="native"/>
         </id>
         <property name="hasBall" type="boolean" column="ball"/>
-        <property name="number" type="int" column="number"/>
+        <property name="playerNumber" type="int" column="playerNumber"/>
         <property name="x" type="string" column="x"/>
         <property name="y" type="string" column="y"/>
         <property name="action" type="int" column="action"/>

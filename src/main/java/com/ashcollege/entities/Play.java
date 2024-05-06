@@ -1,5 +1,6 @@
 package com.ashcollege.entities;
 
+import javax.persistence.OneToMany;
 import java.util.List;
 
 public class Play {
@@ -22,7 +23,7 @@ public class Play {
     public void setId(int id) {
         this.id = id;
     }
-
+    @OneToMany(mappedBy = "play")
     public List<Phase> getPhases() {
         return phases;
     }

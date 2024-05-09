@@ -1,14 +1,21 @@
 package com.ashcollege.entities;
 
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "friendships")
 public class Friendship {
-
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User requester;
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User accepter;
+    @Column(name = "status")
     private int status; // Add this column for friendship status (active, not active, waiting)
 
     public Friendship() {

@@ -1,13 +1,28 @@
 package com.ashcollege.entities;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "phases")
 public class Phase {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "order_num")
     private int order;
+    @ManyToOne
+    @JoinColumn(name = "play_id")
     private Play play;
+    @OneToOne(mappedBy = "phase", cascade = CascadeType.ALL)
     private PlayerPhase player1;
+    @OneToOne(mappedBy = "phase", cascade = CascadeType.ALL)
     private PlayerPhase player2;
+    @OneToOne(mappedBy = "phase", cascade = CascadeType.ALL)
     private PlayerPhase player3;
+    @OneToOne(mappedBy = "phase", cascade = CascadeType.ALL)
     private PlayerPhase player4;
+    @OneToOne(mappedBy = "phase", cascade = CascadeType.ALL)
     private PlayerPhase player5;
 
     public int getId() {

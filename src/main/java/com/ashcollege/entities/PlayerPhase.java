@@ -1,12 +1,25 @@
 package com.ashcollege.entities;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "players_in_phases")
 public class PlayerPhase {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "player_num")
     private int playerNumber;
+    @OneToOne
+    @JoinColumn(name = "phase_id")
     private Phase phase;
+    @Column(name = "ball")
     private boolean hasBall;
+    @Column(name = "x")
     private int x;
+    @Column(name = "y")
     private int y;
+    @Column(name = "action")
     private int action;
 
     public int getId() {

@@ -1,15 +1,23 @@
 package com.ashcollege.entities;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
+    @Column(name = "secret")
     private String secret;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Play> plays;
 
     public User(String username, String password) {

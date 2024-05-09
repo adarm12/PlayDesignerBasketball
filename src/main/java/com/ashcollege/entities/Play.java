@@ -1,13 +1,19 @@
 package com.ashcollege.entities;
 
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
-
+@Entity
+@Table(name = "plays")
 public class Play {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    @Column(name = "name")
     private String name;
+    @OneToMany(mappedBy = "play", cascade = CascadeType.ALL)
     private List<Phase> phases;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User owner;
 
 

@@ -11,5 +11,13 @@
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->
     <mapping file="objects.hbm.xml"/>
+
+    <mapping package="com.ashcollege.entities" class="com.ashcollege.entities.User"/>
+    <mapping package="com.ashcollege.entities" class="com.ashcollege.entities.Friendship"/>
+    <mapping package="com.ashcollege.entities" class="com.ashcollege.entities.Play"/>
+    <mapping package="com.ashcollege.entities" class="com.ashcollege.entities.Phase"/>
+    <mapping package="com.ashcollege.entities" class="com.ashcollege.entities.PlayerPhase"/>
   </session-factory>
 </hibernate-configuration>
+
+

@@ -15,6 +15,9 @@ public class Errors {
     public static final int ERROR_NO_SUCH_SECRET = 10;
     public static final int ERROR_FRIENDSHIP_EXIST = 11;
     public static final int ERROR_FRIENDSHIP_DOESNT_EXIST = 12;
+    public static final int THERE_IS_ALREADY_PLAY_WITH_THIS_NAME = 13;
+
+
 
 
 

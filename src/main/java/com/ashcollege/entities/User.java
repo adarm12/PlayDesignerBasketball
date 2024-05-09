@@ -45,8 +45,6 @@ public class User {
     }
 
 
-
-
     public String getSecret() {
         return secret;
     }
@@ -61,5 +59,8 @@ public class User {
 
     public void setPlays(List<Play> plays) {
         this.plays = plays;
+    }
+    public void addPlay(Play play) {
+        this.plays.add(play);
     }
 }

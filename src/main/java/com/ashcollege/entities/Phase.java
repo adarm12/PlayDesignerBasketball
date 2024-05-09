@@ -1,7 +1,5 @@
 package com.ashcollege.entities;
 
-import java.util.List;
-
 public class Phase {
     private int id;
     private int order;
@@ -20,13 +18,15 @@ public class Phase {
         this.id = id;
     }
 
+
     public int getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setOrder(int phaseOrder) {
+        this.order = phaseOrder;
     }
+
 
     public Play getPlay() {
         return play;
